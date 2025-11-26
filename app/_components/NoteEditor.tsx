@@ -24,25 +24,25 @@ interface NoteEditorProps {
 }
 
 const CATEGORY_COLORS = {
-  "Random Thoughts": "bg-[#E8B298]",
-  "School": "bg-[#F4E4B7]",
-  "Personal": "bg-[#A8CFC8]",
+  "random": "bg-[#E8B298]",
+  "school": "bg-[#F4E4B7]",
+  "personal": "bg-[#A8CFC8]",
 };
 
 export const NoteEditor = ({ note, isOpen, onClose, onSave }: NoteEditorProps) => {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
-  const [category, setCategory] = useState("Random Thoughts");
+  const [category, setCategory] = useState("random");
 
   useEffect(() => {
     if (note) {
       setTitle(note.title);
       setContent(note.content || "");
-      setCategory(note.category || "Random Thoughts");
+      setCategory(note.category || "random");
     } else {
       setTitle("");
       setContent("");
-      setCategory("Random Thoughts");
+      setCategory("random");
     }
   }, [note, isOpen]);
 
@@ -65,9 +65,9 @@ export const NoteEditor = ({ note, isOpen, onClose, onSave }: NoteEditorProps) =
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="Random Thoughts">Random Thoughts</SelectItem>
-                <SelectItem value="School">School</SelectItem>
-                <SelectItem value="Personal">Personal</SelectItem>
+                <SelectItem value="random">Random Thoughts</SelectItem>
+                <SelectItem value="school">School</SelectItem>
+                <SelectItem value="personal">Personal</SelectItem>
               </SelectContent>
             </Select>
             

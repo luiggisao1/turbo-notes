@@ -19,9 +19,10 @@ export default function NotesPage() {
   const [selectedCategory, setSelectedCategory] = useState("All Categories");
   const [editingNote, setEditingNote] = useState<Note | null>(null);
   const [isEditorOpen, setIsEditorOpen] = useState(false);
+  const [categoryCounts, setCategoryCounts] = useState<{ [key: string]: number }>({});
 
-  const fetchNotes = async () => {
-    const response = await apiClient.fetchWithAuth("http://localhost:8000/notes/");
+  const fetchNotes = async (query?: string) => {
+    const response = await apiClient.fetchWithAuth("http://localhost:8000/notes/?search=" + encodeURIComponent(query || ""));
     if (response.ok) {
       const data = await response.json();
       setNotes(data);
@@ -29,6 +30,17 @@ export default function NotesPage() {
       console.error("Failed to fetch notes");
     }
   };
+
+  const fetchCountCategories = async () => {
+    const response = await apiClient.fetchWithAuth("http://localhost:8000/notes/counts-by-category/");
+    if (response.ok) {
+      const data = await response.json();
+      console.log("Category counts:", data);
+      setCategoryCounts(data);
+    } else {
+      console.error("Failed to fetch category counts");
+    }
+  }
 
   const handleLogout = async () => {
     apiClient.logout();
@@ -40,8 +52,13 @@ export default function NotesPage() {
       router.replace("/login");
     } else if (user) {
       fetchNotes();
+      fetchCountCategories();
     }
   }, [loading, user, router]);
+
+  useEffect(() => {
+    fetchNotes(selectedCategory === "all" ? "" : selectedCategory)
+  }, [selectedCategory]);
 
   if (loading) return <div className="p-6">Loading...</div>;
   if (!user) return null;
@@ -51,9 +68,45 @@ export default function NotesPage() {
     setIsEditorOpen(true);
   };
 
-  const filteredNotes = selectedCategory === "All Categories"
-    ? notes
-    : notes.filter((note: any) => note.category === selectedCategory);
+  const handleSaveNote = async (title: string, content: string, category: string) => {
+    const payload = { title, content, category };
+    console.log("Saving note:", payload);
+    if (editingNote) {
+      // Update existing note
+      const response = await apiClient.fetchWithAuth(`http://localhost:8000/notes/${editingNote.id}/`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      if (response.ok) {
+        fetchNotes();
+      } else {
+        console.error("Failed to update note");
+      }
+    } else {
+      // Create new note
+      const response = await apiClient.fetchWithAuth("http://localhost:8000/notes/", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      if (response.ok) {
+        fetchNotes();
+        fetchCountCategories();
+      } else {
+        console.error("Failed to create note");
+      }
+    }
+  }
+
+  const handleEditNote = (note: Note) => {
+    setEditingNote(note);
+    setIsEditorOpen(true);
+  };
+
+  // const filteredNotes = selectedCategory === "All Categories"
+  //   ? notes
+  //   : notes.filter((note: any) => note.category === selectedCategory);
 
   return (
     <div className="min-h-screen bg-background flex">
@@ -61,6 +114,7 @@ export default function NotesPage() {
         notes={notes}
         selectedCategory={selectedCategory}
         onSelectCategory={setSelectedCategory}
+        categoryCounts={categoryCounts}
       />
 
       <div className="flex-1 flex flex-col">
@@ -69,14 +123,12 @@ export default function NotesPage() {
             <div className="flex items-center gap-4">
               <Button
                 onClick={handleNewNote}
-                className="bg-background hover:bg-accent text-foreground border-2 border-border rounded-full font-sans font-medium px-6"
               >
                 <Plus className="mr-2" size={20} />
                 New Note
               </Button>
               <Button
                 onClick={handleLogout}
-                variant="ghost"
                 className="text-muted-foreground hover:text-foreground"
               >
                 <LogOut className="mr-2" size={20} />
@@ -87,15 +139,15 @@ export default function NotesPage() {
         </header>
 
         <main className="flex-1 px-8 py-8 overflow-y-auto">
-          {filteredNotes.length === 0 ? (
+          {notes.length === 0 ? (
             <EmptyNotesState />
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 auto-rows-max">
-              {filteredNotes.map((note) => (
+              {notes.map((note) => (
                 <NoteCard
                   key={note.id}
                   note={note}
-                  onEdit={() => {}}
+                  onEdit={() => handleEditNote(note)}
                   onDelete={() => {}}
                 />
               ))}
@@ -111,7 +163,7 @@ export default function NotesPage() {
           setIsEditorOpen(false);
           setEditingNote(null);
         }}
-        onSave={() => {}}
+        onSave={handleSaveNote}
       />
     </div>
   );

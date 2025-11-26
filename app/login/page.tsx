@@ -57,7 +57,6 @@ export default function LoginPage() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              className="w-full h-12 bg-card border-border px-4 font-sans"
             />
           </div>
 
@@ -69,14 +68,13 @@ export default function LoginPage() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              className="w-full h-12 bg-card border-border px-4 pr-12 font-sans"
             />
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
               className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
             >
-              {showPassword ? <EyeClosed size={20} /> : <Eye size={20} />}
+              {showPassword ? <EyeClosed className="text-foreground" size={20} /> : <Eye className="text-foreground" size={20} />}
             </button>
           </div>
 
@@ -87,7 +85,6 @@ export default function LoginPage() {
           <Button
             type="submit"
             disabled={pending}
-            className="rounded-4xl w-full h-12 bg-card hover:bg-accent text-foreground border-2 border-border rounded-xl font-sans font-medium transition-all"
           >
             {pending ? "Logging in..." : "Login"}
           </Button>
@@ -96,7 +93,7 @@ export default function LoginPage() {
         <div className="mt-6 text-center">
           <Link
             href="/signup"
-            className="text-sm text-muted-foreground hover:text-foreground underline font-sans"
+            className="text-primary-accent text-sm text-muted-foreground underline font-sans"
           >
             Oops! I've never been here before
           </Link>

@@ -31,7 +31,7 @@ class ApiClient {
   private refreshUrl: string;
 
   private constructor(refreshUrl?: string) {
-    this.refreshUrl = refreshUrl || (process?.env?.NEXT_PUBLIC_AUTH_REFRESH_URL as string) || 'http://localhost:8000/auth/refresh/';
+    this.refreshUrl = refreshUrl || (process?.env?.NEXT_PUBLIC_AUTH_REFRESH_URL as string) || 'http://localhost:8000/auth/token/refresh/';
   }
 
   static getInstance(refreshUrl?: string) {

@@ -1,22 +1,17 @@
 @import "tailwindcss";
 
-:root {
-  --background: #FAF1E3;
-  --foreground: #88642A;
-}
-
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
+  --color-background: hsla(37, 70%, 94%, 1);
+  --color-foreground: hsla(37, 53%, 35%, 1);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #FAF1E3;
-    --foreground: #88642A;
-  }
+  --color-primary: hsla(37, 70%, 94%, 1);
+  --color-primary-hover: hsla(37, 45%, 40%, 0.2);
+  --color-primary-input-border: hsla(37, 45%, 40%, 1);
+  --color-primary-accent: hsla(37, 45%, 40%, 1);
+  --color-note--random-background: hsla(24, 81%, 67%, 0.5);
+  --color-note--school-background: hsla(42, 95%, 78%, 0.5);
+  --color-note--personal-background: hsla(176, 23%, 57%, 0.5);
 }
 
 body {

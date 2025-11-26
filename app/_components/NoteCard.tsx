@@ -1,6 +1,7 @@
 import { formatDistanceToNow, format, isToday, isYesterday } from "date-fns";
 import { Button } from "@/components/ui/button";
 import { Trash2 } from "lucide-react";
+import { mapCategoryToText } from "@/lib/category";
 
 export interface Note {
   id: string;
@@ -18,9 +19,9 @@ interface NoteCardProps {
 }
 
 const CATEGORY_COLORS = {
-  "Random Thoughts": "bg-[#E8B298] border-[#D9A384]",
-  "School": "bg-[#F4E4B7] border-[#E6D5A3]",
-  "Personal": "bg-[#A8CFC8] border-[#94BBB4]",
+  "random": "bg-[#EF9C6680] border-[#EF9C66]",
+  "school": "bg-[#FCDC9480] border-[#FCDC94]",
+  "personal": "bg-[#78ABA880] border-[#78ABA8]",
 };
 
 const formatDate = (dateString: string) => {
@@ -39,17 +40,17 @@ const formatDate = (dateString: string) => {
 
 export const NoteCard = ({ note, onEdit, onDelete }: NoteCardProps) => {
   const colorClass = CATEGORY_COLORS[note.category as keyof typeof CATEGORY_COLORS] || "bg-card border-border";
-  
+
   return (
     <div
-      className={`${colorClass} border-2 rounded-3xl p-6 cursor-pointer hover:shadow-lg transition-all relative group`}
+      className={`text-black border-2 rounded-3xl p-6 cursor-pointer hover:shadow-lg transition-all relative group
+      ${colorClass}`}
       onClick={() => onEdit(note)}
     >
       <div className="flex items-center justify-between mb-3">
-        <div className="flex items-center gap-2 text-sm font-sans">
-          <span className="font-medium">{formatDate(note.created_at)}</span>
-          <span className="text-muted-foreground">•</span>
-          <span className="text-muted-foreground">{note.category}</span>
+        <div className="flex items-center gap-2 text-sm font-sans text-black">
+          <span className="font-black">{formatDate(note.created_at)}</span>
+          <span className="font-normal">{mapCategoryToText(note.category)}</span>
         </div>
         <Button
           onClick={(e) => {
@@ -64,12 +65,12 @@ export const NoteCard = ({ note, onEdit, onDelete }: NoteCardProps) => {
         </Button>
       </div>
       
-      <h3 className="text-2xl font-serif font-bold text-foreground mb-3">
+      <h3 className="text-2xl font-serif font-bold mb-3">
         {note.title}
       </h3>
       
       {note.content && (
-        <p className="text-foreground/80 font-sans line-clamp-4 whitespace-pre-wrap">
+        <p className="font-normal line-clamp-4 whitespace-pre-wrap">
           {note.content}
         </p>
       )}

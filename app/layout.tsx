@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+// import "./index.css";
 import { AuthProvider } from "@/app/lib/auth";
 import { Toaster } from "@/components/ui/toaster";
 
@@ -16,7 +17,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className="bg">
+      <body className="bg-primary">
         <AuthProvider>{children}</AuthProvider>
         <Toaster />
       </body>
