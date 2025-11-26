@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { AuthProvider } from "@/app/lib/auth"
+import { AuthProvider } from "@/app/lib/auth";
+import { Toaster } from "@/components/ui/toaster";
 
 export const metadata: Metadata = {
   title: "Turbo AI notes",
@@ -17,6 +18,7 @@ export default function RootLayout({
     <html lang="en">
       <body className="bg">
         <AuthProvider>{children}</AuthProvider>
+        <Toaster />
       </body>
     </html>
   );

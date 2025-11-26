@@ -24,6 +24,15 @@ export type FormState =  {
   errors?: Record<string, string[]>;
 }
 
+export type LoginFormState = {
+  success: boolean;
+  tokens?: {
+    access: string;
+    refresh?: string;
+  },
+  error?: string;
+}
+
 export const loginSchema = z.object({
   email: z.string().trim(),
   password: z

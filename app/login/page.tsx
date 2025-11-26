@@ -11,12 +11,13 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
 import { login } from '@/app/actions/auth';
-import { FormState } from "@/lib/definitions";
+import { useToast } from "@/app/hooks/use-toast";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const { toast } = useToast();
 
   const auth = useAuth();
 
@@ -24,9 +25,15 @@ export default function LoginPage() {
 
   useEffect(() => {
     const authWithToken = async (access: string, refresh: string) => {
-      return auth.loginWithTokens({ access, refresh }, "/notes");
+      return auth.loginWithTokens({ access, refresh }, "/");
     }
+
     if (state.success && !pending) {
+      toast({
+        title: "Welcome Back!",
+        description: "You have been logged in successfully.",
+        duration: 3000,
+      });
       authWithToken(state.tokens!.access, state.tokens!.refresh!);
     }
   }, [state, pending]);
@@ -72,6 +79,10 @@ export default function LoginPage() {
               {showPassword ? <EyeClosed size={20} /> : <Eye size={20} />}
             </button>
           </div>
+
+          {state?.error && (
+            <p className="text-sm text-red-600">{state?.error}</p>
+          )}
 
           <Button
             type="submit"

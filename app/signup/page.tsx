@@ -11,11 +11,13 @@ import { Input } from "@/components/ui/input";
 
 import { signup } from '@/app/actions/auth';
 import { useAuth } from "../lib/auth";
+import { useToast } from "../hooks/use-toast";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const { toast } = useToast();
 
   const auth = useAuth();
 
@@ -23,9 +25,14 @@ export default function LoginPage() {
 
   useEffect(() => {
       const authWithToken = async (access: string, refresh: string) => {
-        return auth.loginWithTokens({ access, refresh }, "/notes");
+        return auth.loginWithTokens({ access, refresh }, "/");
       }
       if (state.success && !pending) {
+        toast({
+          title: "Welcome!",
+          description: "Your account has been created successfully.",
+          duration: 3000,
+        });
         authWithToken(state.tokens!.access, state.tokens!.refresh!);
       }
     }, [state, pending]);
@@ -52,7 +59,7 @@ export default function LoginPage() {
               required
               className="w-full h-12 bg-card border-border px-4 font-sans"
             />
-            {state?.errors?.email && <p>{state.errors.email}</p>}
+            {state?.errors?.email && <p className="text-sm text-red-600 mt-1">{state.errors.email}</p>}
           </div>
 
           <div className="relative">
@@ -73,8 +80,9 @@ export default function LoginPage() {
             >
               {showPassword ? <EyeClosed size={20} /> : <Eye size={20} />}
             </button>
-            {state?.errors && (
-            <div>
+          </div>
+          {state?.errors?.password && (
+            <div className="text-sm text-red-600">
               <p>Password must:</p>
               <ul>
                 {state.errors.password.map((error) => (
@@ -83,7 +91,9 @@ export default function LoginPage() {
               </ul>
             </div>
           )}
-          </div>
+          {state?.errors?.error && (
+            <p className="text-sm text-red-600 mt-1">{state.errors.error}</p>
+          )}
           <Button
             type="submit"
             disabled={pending}

@@ -1,5 +1,4 @@
-import { SignupFormSchema, FormState, loginSchema } from '@/lib/definitions'
-import { redirect, useRouter } from 'next/navigation';
+import { SignupFormSchema, FormState, loginSchema, LoginFormState } from '@/lib/definitions'
 import apiClient from '@/app/lib/apiClient';
 
 export async function signup(state: FormState, payload: FormData): Promise<FormState> {
@@ -27,7 +26,6 @@ export async function signup(state: FormState, payload: FormData): Promise<FormS
       errors,
     };
   }
-  await new Promise(resolve => setTimeout(resolve, 1500));
 
   try {
     const res = await fetch("http://localhost:8000/auth/register/", {
@@ -37,17 +35,16 @@ export async function signup(state: FormState, payload: FormData): Promise<FormS
     });
     const data = await res.json();
     await apiClient.setTokens({ access: data.access, refresh: data.refresh });
-    return { success: true, tokens: { access: data.access, refresh: data.refresh } };
+    return { success: !data.error, tokens: { access: data.access, refresh: data.refresh }, errors: data.error ? { error: [data.error] } : undefined };
   } catch (error) {
-    return { success: false, errors: { error: ["Login failed"] } };
+    return { success: false, errors: { error: ["Signup failed"] } };
   }
 }
 
-export async function login(state: FormState, payload: FormData): Promise<FormState> {
+export async function login(state: LoginFormState, payload: FormData): Promise<LoginFormState> {
   if (!(payload instanceof FormData)) {
     return {
       success: false,
-      errors: { error: ["Invalid Form Data"] },
     };
   }
   const formData = Object.fromEntries(payload);
@@ -55,21 +52,16 @@ export async function login(state: FormState, payload: FormData): Promise<FormSt
   const parsed = loginSchema.safeParse(formData);
 
   if (!parsed.success) {
-    const errors = parsed.error.flatten().fieldErrors;
     const fields: Record<string, string> = {};
 
     for (const key of Object.keys(formData)) {
       fields[key] = formData[key].toString();
     }
-    console.log("Login parse errors:", errors);
+
     return {
       success: false,
-      fields,
-      errors,
     };
   }
-
-  await new Promise(resolve => setTimeout(resolve, 1500));
 
   try {
     const res = await fetch("http://localhost:8000/auth/login/", {
@@ -79,9 +71,9 @@ export async function login(state: FormState, payload: FormData): Promise<FormSt
     });
     const data = await res.json();
     await apiClient.setTokens({ access: data.access, refresh: data.refresh });
-    return { success: true, tokens: { access: data.access, refresh: data.refresh } };
+    return { success: !data.error, tokens: { access: data.access, refresh: data.refresh }, error: data.error };
   } catch (error) {
-    return { success: false, errors: { error: ["Login failed"] } };
+    return { success: false, error: "Login failed" };
   }
 }
 
