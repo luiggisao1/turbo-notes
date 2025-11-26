@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { LogOut } from "lucide-react";
 
 interface Note {
   id: string;
@@ -6,10 +7,10 @@ interface Note {
 }
 
 interface CategorySidebarProps {
-  notes: Note[];
   selectedCategory: string;
   onSelectCategory: (category: string) => void;
   categoryCounts: { [key: string]: number };
+  onLogout: () => void;
 }
 
 const CATEGORY_COLORS = {
@@ -18,7 +19,7 @@ const CATEGORY_COLORS = {
   "personal": "bg-[#78ABA8]",
 };
 
-export const CategorySidebar = ({ notes, selectedCategory, onSelectCategory, categoryCounts }: CategorySidebarProps) => {
+export const CategorySidebar = ({ selectedCategory, onSelectCategory, categoryCounts, onLogout }: CategorySidebarProps) => {
   const categories = [
     {
       key: "random",
@@ -35,26 +36,35 @@ export const CategorySidebar = ({ notes, selectedCategory, onSelectCategory, cat
   ];
 
   return (
-    <aside className="w-64 bg-background px-6 py-8 flex-shrink-0 flex flex-col justify-center">
-      <h2 className="text-lg font-serif font-bold text-foreground mb-6">All Categories</h2>
-      <div className="space-y-2">
-        {categories.map((category) => {
-          const colorClass = CATEGORY_COLORS[category.key as keyof typeof CATEGORY_COLORS] || "bg-card";
+    <aside className="bg-background px-6 py-8 flex-shrink-0 flex flex-col mt-[90px] justify-between">
+      <div>
+        <h2 onClick={() => onSelectCategory('all')} className="text-lg font-serif font-bold text-foreground mb-6 cursor-pointer">All Categories</h2>
+        <div className="space-y-2 w-64">
+          {categories.map((category) => {
+            const colorClass = CATEGORY_COLORS[category.key as keyof typeof CATEGORY_COLORS] || "bg-card";
 
-          return (
-            <Button
-              key={category.key}
-              variant="ghost"
-              className={`w-full justify-start text-left font-sans`}
-              onClick={() => onSelectCategory(category.key)}
-            >
-              <div className={`w-3 h-3 rounded-full ${colorClass} mr-3 flex-shrink-0`} />
-              <span className="flex-1">{category.label}</span>
-              {categoryCounts[category.key] > 0 && <span className="text-muted-foreground ml-2">{categoryCounts[category.key]}</span>}
-            </Button>
-          );
-        })}
+            return (
+              <span
+                key={category.key}
+                className={`text-xs w-full justify-start text-left font-sans pr-4 py-2 rounded-lg cursor-pointer flex items-center hover:bg-foreground/10
+                  ${selectedCategory === category.key ? "font-bold" : "font-normal"}
+                `}
+                onClick={() => onSelectCategory(category.key)}
+              >
+                <div className={`w-3 h-3 rounded-full ${colorClass} mr-3 flex-shrink-0`} />
+                <span className="flex-1">{category.label}</span>
+                {categoryCounts[category.key] > 0 && <span className="text-muted-foreground ml-2">{categoryCounts[category.key]}</span>}
+              </span>
+            );
+          })}
+        </div>
       </div>
+      <Button
+        onClick={onLogout}
+      >
+        <LogOut className="mr-2" size={20} />
+        Logout
+      </Button>
     </aside>
   );
 };

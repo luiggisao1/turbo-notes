@@ -68,19 +68,19 @@ export const NoteEditor = ({ note, isOpen, onClose, onSave }: NoteEditorProps) =
             <SelectContent className="bg-[#F5EFE7] border-2 border-foreground/20">
               <SelectItem value="random" className="text-lg py-3 hover:bg-[#95713933]">
                 <div className="flex items-center gap-3">
-                  <span className="w-4 h-4 rounded-full bg-[#E8B298]" />
+                  <span className="w-4 h-4 rounded-full bg-[#EF9C66]" />
                   Random Thoughts
                 </div>
               </SelectItem>
               <SelectItem value="personal" className="text-lg py-3 hover:bg-[#95713933]">
                 <div className="flex items-center gap-3">
-                  <span className="w-4 h-4 rounded-full bg-[#A8CFC8]" />
+                  <span className="w-4 h-4 rounded-full bg-[#78ABA8]" />
                   Personal
                 </div>
               </SelectItem>
               <SelectItem value="school" className="text-lg py-3 hover:bg-[#95713933]">
                 <div className="flex items-center gap-3">
-                  <span className="w-4 h-4 rounded-full bg-[#F4E4B7]" />
+                  <span className="w-4 h-4 rounded-full bg-[#FCDC94]" />
                   School
                 </div>
               </SelectItem>

@@ -40,9 +40,9 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-background font-sans">
       <div className="w-full max-w-md px-6">
-        <div className="flex flex-col items-center mb-8">
-          <Image src='/signup-avatar.png' alt="Signup Avatar" width={100} height={100} />
-          <h1 className="text-4xl font-serif font-bold text-foreground mb-2">
+        <div className="flex flex-col items-center mb-9">
+          <Image src='/signup-avatar.png' alt="Signup Avatar" width={150} height={150} />
+          <h1 className="text-4xl font-serif font-bold text-foreground mb-2 mt-7">
             Yay, New Friend!
           </h1>
         </div>
@@ -57,7 +57,6 @@ export default function LoginPage() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              className="w-full h-12 bg-card border-border px-4 font-sans"
             />
             {state?.errors?.email && <p className="text-sm text-red-600 mt-1">{state.errors.email}</p>}
           </div>
@@ -71,14 +70,13 @@ export default function LoginPage() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              className="w-full h-12 bg-card border-border px-4 pr-12 font-sans"
             />
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
               className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
             >
-              {showPassword ? <EyeClosed size={20} /> : <Eye size={20} />}
+              {showPassword ? <Eye className="text-foreground" size={20} /> : <EyeClosed className="text-foreground" size={20} />}
             </button>
           </div>
           {state?.errors?.password && (
@@ -97,16 +95,16 @@ export default function LoginPage() {
           <Button
             type="submit"
             disabled={pending}
-            className="rounded-4xl w-full h-12 bg-card hover:bg-accent text-foreground border-2 border-border rounded-xl font-sans font-medium transition-all"
+            className="mt-11"
           >
             {pending ? "Signing up..." : "Sign Up"}
           </Button>
         </Form>
 
-        <div className="mt-6 text-center">
+        <div className="mt-4 text-center">
           <Link
             href="/login"
-            className="text-sm text-muted-foreground hover:text-foreground underline font-sans"
+            className="text-primary-accent text-sm text-muted-foreground underline font-sans"
           >
             We’re already friends!
           </Link>

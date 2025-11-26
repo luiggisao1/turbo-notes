@@ -41,9 +41,9 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen flex items-center justify-center font-sans">
       <div className="w-full max-w-md px-6">
-        <div className="flex flex-col items-center mb-8">
+        <div className="flex flex-col items-center mb-9">
           <Image src='/cactus.png' alt="Cactus Illustration" width={100} height={100} />
-          <h1 className="text-4xl font-serif font-bold text-foreground mb-2">
+          <h1 className="text-4xl font-serif font-bold text-foreground mb-2 mt-8">
             Yay, You're Back!
           </h1>
         </div>
@@ -74,7 +74,7 @@ export default function LoginPage() {
               onClick={() => setShowPassword(!showPassword)}
               className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
             >
-              {showPassword ? <EyeClosed className="text-foreground" size={20} /> : <Eye className="text-foreground" size={20} />}
+              {showPassword ? <Eye className="text-foreground" size={20} /> : <EyeClosed className="text-foreground" size={20} />}
             </button>
           </div>
 
@@ -83,6 +83,7 @@ export default function LoginPage() {
           )}
 
           <Button
+            className="w-full mt-11"
             type="submit"
             disabled={pending}
           >
@@ -90,7 +91,7 @@ export default function LoginPage() {
           </Button>
         </Form>
 
-        <div className="mt-6 text-center">
+        <div className="mt-4 text-center">
           <Link
             href="/signup"
             className="text-primary-accent text-sm text-muted-foreground underline font-sans"

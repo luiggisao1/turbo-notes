@@ -6,7 +6,7 @@ import { useAuth } from "@/app/lib/auth";
 import apiClient from "./lib/apiClient";
 
 import { Button } from "@/components/ui/button";
-import { Plus, LogOut } from "lucide-react";
+import { Plus } from "lucide-react";
 import { CategorySidebar } from "@/components/CategorySidebar";
 import { EmptyNotesState } from "./_components/EmptyNoteState";
 import { Note, NoteCard } from "./_components/NoteCard";
@@ -16,7 +16,7 @@ export default function NotesPage() {
   const { user, loading } = useAuth();
   const router = useRouter();
   const [notes, setNotes] = useState<Note[]>([]);
-  const [selectedCategory, setSelectedCategory] = useState("All Categories");
+  const [selectedCategory, setSelectedCategory] = useState("all");
   const [editingNote, setEditingNote] = useState<Note | null>(null);
   const [isEditorOpen, setIsEditorOpen] = useState(false);
   const [categoryCounts, setCategoryCounts] = useState<{ [key: string]: number }>({});
@@ -105,7 +105,7 @@ export default function NotesPage() {
   return (
     <div className="min-h-screen bg-background flex">
       <CategorySidebar
-        notes={notes}
+        onLogout={handleLogout}
         selectedCategory={selectedCategory}
         onSelectCategory={setSelectedCategory}
         categoryCounts={categoryCounts}
@@ -120,13 +120,6 @@ export default function NotesPage() {
               >
                 <Plus className="mr-2" size={20} />
                 New Note
-              </Button>
-              <Button
-                onClick={handleLogout}
-                className="text-muted-foreground hover:text-foreground"
-              >
-                <LogOut className="mr-2" size={20} />
-                Logout
               </Button>
             </div>
           </div>
