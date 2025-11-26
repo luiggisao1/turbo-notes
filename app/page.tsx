@@ -70,9 +70,7 @@ export default function NotesPage() {
 
   const handleSaveNote = async (title: string, content: string, category: string) => {
     const payload = { title, content, category };
-    console.log("Saving note:", payload);
     if (editingNote) {
-      // Update existing note
       const response = await apiClient.fetchWithAuth(`http://localhost:8000/notes/${editingNote.id}/`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
@@ -80,11 +78,11 @@ export default function NotesPage() {
       });
       if (response.ok) {
         fetchNotes();
+        fetchCountCategories();
       } else {
         console.error("Failed to update note");
       }
     } else {
-      // Create new note
       const response = await apiClient.fetchWithAuth("http://localhost:8000/notes/", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -103,10 +101,6 @@ export default function NotesPage() {
     setEditingNote(note);
     setIsEditorOpen(true);
   };
-
-  // const filteredNotes = selectedCategory === "All Categories"
-  //   ? notes
-  //   : notes.filter((note: any) => note.category === selectedCategory);
 
   return (
     <div className="min-h-screen bg-background flex">
