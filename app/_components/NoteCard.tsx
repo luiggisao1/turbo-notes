@@ -53,13 +53,13 @@ export const NoteCard = ({ note, onEdit, onDelete }: NoteCardProps) => {
           <span className="inter-regular">{mapCategoryToText(note.category)}</span>
         </div>
         <Button
+          variant="ghost"
           onClick={(e) => {
             e.stopPropagation();
             onDelete(note.id);
           }}
-          variant="ghost"
           size="icon"
-          className="opacity-0 group-hover:opacity-100 transition-opacity"
+          className="opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-200"
         >
           <Trash2 size={16} />
         </Button>
