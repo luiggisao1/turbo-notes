@@ -108,6 +108,18 @@ export default function NotesPage() {
     setIsEditorOpen(true);
   };
 
+  const handleDeleteNote = async (noteId: string) => {
+    const response = await apiClient.fetchWithAuth(`http://localhost:8000/notes/${noteId}/`, {
+      method: "DELETE",
+    });
+    if (response.ok) {
+      fetchNotes();
+      fetchCountCategories();
+    } else {
+      console.error("Failed to delete note");
+    }
+  };
+
   return (
     <div className="min-h-screen bg-background flex">
       <CategorySidebar
@@ -142,7 +154,7 @@ export default function NotesPage() {
                   key={note.id}
                   note={note}
                   onEdit={() => handleEditNote(note)}
-                  onDelete={() => {}}
+                  onDelete={() => handleDeleteNote(note.id)}
                 />
               ))}
             </div>
