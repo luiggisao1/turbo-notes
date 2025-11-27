@@ -36,7 +36,7 @@ export const CategorySidebar = ({ selectedCategory, onSelectCategory, categoryCo
   ];
 
   return (
-    <aside className="bg-background px-6 py-8 flex-shrink-0 flex flex-col mt-[90px] justify-between">
+    <aside className="fixed left-0 top-[90px] h-[calc(100vh-90px)] w-72 bg-background px-6 py-8 flex-shrink-0 flex flex-col justify-between">
       <div>
         <h2 onClick={() => onSelectCategory('all')} className="text-lg inter-bold mb-6 cursor-pointer">All Categories</h2>
         <div className="space-y-2 w-64">

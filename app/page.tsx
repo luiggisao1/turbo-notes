@@ -129,7 +129,7 @@ export default function NotesPage() {
         categoryCounts={categoryCounts}
       />
 
-      <div className="flex-1 flex flex-col">
+      <div className="flex-1 flex flex-col ml-72">
         <header className="bg-background px-8 pt-10">
           <div className="flex justify-between items-center justify-end">
             <div className="flex items-center gap-1 h-10">
