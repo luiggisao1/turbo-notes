@@ -4,7 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { X } from "lucide-react";
-import { format } from "date-fns";
+import { format, set } from "date-fns";
 
 interface Note {
   id: string;
@@ -45,12 +45,12 @@ export const NoteEditor = ({ note, isOpen, onClose, onSave }: NoteEditorProps) =
       setIsDirty(false);
     } else {
       setTitle("Note Title");
-      setContent("");
+      setContent("Pour your heart out...");
       setCategory("random");
       setLastEdited(undefined);
-      setIsDirty(false);
+      setIsDirty(true);
     }
-  }, [note]);
+  }, [note, isOpen]);
 
   useEffect(() => {
     if (!isOpen) return;
