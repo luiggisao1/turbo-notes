@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "test": "vitest",
+    "test:watch": "vitest --watch"
   },
   "dependencies": {
     "@radix-ui/react-dialog": "^1.1.15",
@@ -34,6 +36,19 @@
     "eslint-config-next": "16.0.4",
     "postcss": "^8.5.6",
     "tailwindcss": "^4.1.17",
-    "typescript": "^5"
+    "typescript": "^5",
+    "vitest": "*",
+    "@testing-library/react": "*",
+    "@testing-library/jest-dom": "*",
+    "@testing-library/user-event": "*",
+    "jsdom": "*"
+  },
+  "vitest": {
+    "test": {
+      "environment": "jsdom",
+      "setupFiles": [
+        "./vitest.setup.ts"
+      ]
+    }
   }
 }
