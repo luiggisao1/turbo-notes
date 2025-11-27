@@ -43,14 +43,14 @@ export const NoteCard = ({ note, onEdit, onDelete }: NoteCardProps) => {
 
   return (
     <div
-      className={`text-black border-2 rounded-xl p-4 cursor-pointer hover:shadow-lg transition-all relative group
+      className={`text-black border-3 rounded-xl p-4 cursor-pointer hover:shadow-lg min-h-75 transition-all relative group
       ${colorClass}`}
       onClick={() => onEdit(note)}
     >
       <div className="flex items-center justify-between mb-2">
-        <div className="flex items-center gap-2 text-sm font-sans text-black">
-          <span className="font-black">{formatDate(note.created_at)}</span>
-          <span className="font-normal">{mapCategoryToText(note.category)}</span>
+        <div className="flex items-center gap-2 text-sm text-black">
+          <span className="inter-bold">{formatDate(note.created_at)}</span>
+          <span className="inter-regular">{mapCategoryToText(note.category)}</span>
         </div>
         <Button
           onClick={(e) => {
@@ -65,9 +65,9 @@ export const NoteCard = ({ note, onEdit, onDelete }: NoteCardProps) => {
         </Button>
       </div>
 
-      <h3 className="text-2xl font-serif font-bold mb-3">{note.title}</h3>
+      <h3 className="text-4xl inria-serif-bold mb-3">{note.title}</h3>
 
-      {note.content && <p className="font-normal line-clamp-4 whitespace-pre-wrap">{note.content}</p>}
+      {note.content && <p className="text-md inter-regular line-clamp-12 whitespace-pre-wrap">{note.content}</p>}
     </div>
   );
 };

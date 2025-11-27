@@ -77,10 +77,13 @@ export default function NotesPage() {
         body: JSON.stringify(payload),
       });
       if (response.ok) {
+        const data = await response.json().catch(() => null);
         fetchNotes();
         fetchCountCategories();
+        return data as Note | null;
       } else {
         console.error("Failed to update note");
+        return null;
       }
     } else {
       const response = await apiClient.fetchWithAuth("http://localhost:8000/notes/", {
@@ -89,10 +92,13 @@ export default function NotesPage() {
         body: JSON.stringify(payload),
       });
       if (response.ok) {
+        const data = await response.json().catch(() => null);
         fetchNotes();
         fetchCountCategories();
+        return data as Note | null;
       } else {
         console.error("Failed to create note");
+        return null;
       }
     }
   }
@@ -112,10 +118,11 @@ export default function NotesPage() {
       />
 
       <div className="flex-1 flex flex-col">
-        <header className="bg-background px-8 py-6">
+        <header className="bg-background px-8 pt-10">
           <div className="flex justify-between items-center justify-end">
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-1 h-10">
               <Button
+                className="h-full"
                 onClick={handleNewNote}
               >
                 <Plus className="mr-2" size={20} />

@@ -39,11 +39,11 @@ export default function LoginPage() {
   }, [state, pending]);
 
   return (
-    <div className="min-h-screen flex items-center justify-center font-sans">
+    <div className="min-h-screen flex items-center justify-center">
       <div className="w-full max-w-md px-6">
         <div className="flex flex-col items-center mb-9">
           <Image src='/cactus.png' alt="Cactus Illustration" width={100} height={100} />
-          <h1 className="text-4xl font-serif font-bold text-foreground mb-2 mt-8">
+          <h1 className="text-4xl inria-serif-bold font-bold text-foreground mb-2 mt-8">
             Yay, You're Back!
           </h1>
         </div>
@@ -57,6 +57,7 @@ export default function LoginPage() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
+              className="text-xs inter-regular h-10"
             />
           </div>
 
@@ -68,6 +69,7 @@ export default function LoginPage() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
+              className="text-xs inter-regular h-10"
             />
             <button
               type="button"
@@ -83,7 +85,7 @@ export default function LoginPage() {
           )}
 
           <Button
-            className="w-full mt-11"
+            className="w-full mt-11 inter-bold text-base h-11"
             type="submit"
             disabled={pending}
           >
@@ -94,7 +96,7 @@ export default function LoginPage() {
         <div className="mt-4 text-center">
           <Link
             href="/signup"
-            className="text-primary-accent text-sm text-muted-foreground underline font-sans"
+            className="inter-regular text-primary-accent text-xs text-muted-foreground underline"
           >
             Oops! I've never been here before
           </Link>

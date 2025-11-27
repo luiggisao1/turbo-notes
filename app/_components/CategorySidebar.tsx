@@ -38,7 +38,7 @@ export const CategorySidebar = ({ selectedCategory, onSelectCategory, categoryCo
   return (
     <aside className="bg-background px-6 py-8 flex-shrink-0 flex flex-col mt-[90px] justify-between">
       <div>
-        <h2 onClick={() => onSelectCategory('all')} className="text-lg font-serif font-bold text-foreground mb-6 cursor-pointer">All Categories</h2>
+        <h2 onClick={() => onSelectCategory('all')} className="text-lg inter-bold mb-6 cursor-pointer">All Categories</h2>
         <div className="space-y-2 w-64">
           {categories.map((category) => {
             const colorClass = CATEGORY_COLORS[category.key as keyof typeof CATEGORY_COLORS] || "bg-card";
@@ -46,8 +46,8 @@ export const CategorySidebar = ({ selectedCategory, onSelectCategory, categoryCo
             return (
               <span
                 key={category.key}
-                className={`text-xs w-full justify-start text-left font-sans pr-4 py-2 rounded-lg cursor-pointer flex items-center hover:bg-foreground/10
-                  ${selectedCategory === category.key ? "font-bold" : "font-normal"}
+                className={`text-lg w-full justify-start text-left inter-regular pr-4 py-2 rounded-lg cursor-pointer flex items-center hover:bg-foreground/10
+                  ${selectedCategory === category.key ? "inter-bold" : "inter-regular"}
                 `}
                 onClick={() => onSelectCategory(category.key)}
               >

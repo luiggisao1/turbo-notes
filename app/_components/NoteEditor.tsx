@@ -19,7 +19,7 @@ interface NoteEditorProps {
   note: Note | null;
   isOpen: boolean;
   onClose: () => void;
-  onSave: (title: string, content: string, category: string) => void;
+  onSave: (title: string, content: string, category: string) => Promise<Note | null> | void;
 }
 
 const CATEGORY_COLORS = {
@@ -33,11 +33,14 @@ export const NoteEditor = ({ note, isOpen, onClose, onSave }: NoteEditorProps) =
   const [content, setContent] = useState("");
   const [category, setCategory] = useState("random");
 
+  const [lastEdited, setLastEdited] = useState<string | undefined>(note?.updated_at || note?.created_at);
+
   useEffect(() => {
     if (note) {
       setTitle(note.title);
       setContent(note.content || "");
       setCategory(note.category || "random");
+      setLastEdited(note.updated_at || note.created_at);
     } else {
       setTitle("");
       setContent("");
@@ -45,14 +48,27 @@ export const NoteEditor = ({ note, isOpen, onClose, onSave }: NoteEditorProps) =
     }
   }, [note, isOpen]);
 
-  const handleSave = () => {
+  useEffect(() => {
+    if (!isOpen) return;
     if (!title.trim()) return;
-    onSave(title, content, category);
-    onClose();
-  };
+
+    const timeout = setTimeout(async () => {
+      try {
+        const result = await onSave(title, content, category) as Note | null | void;
+        if (result && result.updated_at) {
+          setLastEdited(result.updated_at);
+        } else {
+          setLastEdited(new Date().toISOString());
+        }
+      } catch (err) {
+        // ignore autosave errors for now
+      }
+    }, 800);
+
+    return () => clearTimeout(timeout);
+  }, [title, content, category, isOpen]);
 
   const colorClass = CATEGORY_COLORS[category as keyof typeof CATEGORY_COLORS] || "bg-card";
-  const lastEdited = note?.updated_at || note?.created_at;
 
   if (!isOpen) return null;
 
@@ -60,7 +76,7 @@ export const NoteEditor = ({ note, isOpen, onClose, onSave }: NoteEditorProps) =
     <div className="bg-primary fixed inset-0 z-50 flex flex-col">
       <div className="flex items-center justify-between pr-6 pt-6 px-6">
         <Select value={category} onValueChange={setCategory}>
-            <SelectTrigger className="w-80 bg-background border-2 border-foreground/20 h-14 text-lg hover:border-foreground/30">
+            <SelectTrigger className="inter-regular w-80 bg-background border-2 border-foreground/20 h-14 text-lg hover:border-foreground/30">
               <div className="flex items-center gap-3">
                 <SelectValue />
               </div>
@@ -68,19 +84,19 @@ export const NoteEditor = ({ note, isOpen, onClose, onSave }: NoteEditorProps) =
             <SelectContent className="bg-[#F5EFE7] border-2 border-foreground/20">
               <SelectItem value="random" className="text-lg py-3 hover:bg-[#95713933]">
                 <div className="flex items-center gap-3">
-                  <span className="w-4 h-4 rounded-full bg-[#EF9C66]" />
+                  <span className="inter-regular w-4 h-4 rounded-full bg-[#EF9C66]" />
                   Random Thoughts
                 </div>
               </SelectItem>
               <SelectItem value="personal" className="text-lg py-3 hover:bg-[#95713933]">
                 <div className="flex items-center gap-3">
-                  <span className="w-4 h-4 rounded-full bg-[#78ABA8]" />
+                  <span className="inter-regular w-4 h-4 rounded-full bg-[#78ABA8]" />
                   Personal
                 </div>
               </SelectItem>
               <SelectItem value="school" className="text-lg py-3 hover:bg-[#95713933]">
                 <div className="flex items-center gap-3">
-                  <span className="w-4 h-4 rounded-full bg-[#FCDC94]" />
+                  <span className="inter-regular w-4 h-4 rounded-full bg-[#FCDC94]" />
                   School
                 </div>
               </SelectItem>
@@ -90,11 +106,11 @@ export const NoteEditor = ({ note, isOpen, onClose, onSave }: NoteEditorProps) =
           <X className="w-[24px]! h-[24px]!" />
         </Button>
       </div>
-      <div className={`m-6 mt-3 p-[64px] rounded-xl ${colorClass} border-3 flex flex-col h-full`}>
+      <div className={`m-6 mt-3 pt-10 px-16 rounded-xl ${colorClass} border-3 flex flex-col h-full`}>
         <div className={`flex items-center justify-end pb-4`}>
           <div className="flex items-center gap-4">
             {lastEdited && (
-              <span className="text-sm text-muted-foreground font-sans">
+              <span className="text-sm inter-regular">
                 Last Edited: {format(new Date(lastEdited), "MMMM d, yyyy 'at' h:mmaaa")}
               </span>
             )}
@@ -106,23 +122,15 @@ export const NoteEditor = ({ note, isOpen, onClose, onSave }: NoteEditorProps) =
             placeholder="Note Title"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            className="text-2xl font-bold border-0 bg-transparent px-0 mb-4 placeholder:text-foreground/40"
+            className="text-4xl inria-serif-bold border-0 bg-transparent px-0 mb-4 placeholder:text-foreground/40"
           />
 
           <Textarea
             placeholder="Pour your heart out..."
             value={content}
             onChange={(e) => setContent(e.target.value)}
-            className="min-h-[400px] border-0 bg-transparent px-0 text-lg resize-none placeholder:text-foreground/40"
+            className="inter-regular min-h-[400px] border-0 bg-transparent px-0 text-lg resize-none placeholder:text-foreground/40"
           />
-        </div>
-        <div className="w-fit">
-          <Button
-            onClick={handleSave}
-            className="rounded-full px-8 w-full py-4 font-sans font-medium text-lg"
-          >
-            Save Note
-          </Button>
         </div>
       </div>
     </div>
