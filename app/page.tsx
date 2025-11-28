@@ -19,10 +19,14 @@ export default function NotesPage() {
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [editingNote, setEditingNote] = useState<Note | null>(null);
   const [isEditorOpen, setIsEditorOpen] = useState(false);
-  const [categoryCounts, setCategoryCounts] = useState<{ [key: string]: number }>({});
+  const [categoryCounts, setCategoryCounts] = useState<{
+    [key: string]: number;
+  }>({});
 
   const fetchNotes = async (query?: string) => {
-    const response = await apiClient.fetchWithAuth("http://localhost:8000/notes/?search=" + encodeURIComponent(query || ""));
+    const response = await apiClient.fetchWithAuth(
+      "http://localhost:8000/notes/?search=" + encodeURIComponent(query || ""),
+    );
     if (response.ok) {
       const data = await response.json();
       setNotes(data);
@@ -32,32 +36,43 @@ export default function NotesPage() {
   };
 
   const fetchCountCategories = async () => {
-    const response = await apiClient.fetchWithAuth("http://localhost:8000/notes/counts-by-category/");
+    const response = await apiClient.fetchWithAuth(
+      "http://localhost:8000/notes/counts-by-category/",
+    );
     if (response.ok) {
       const data = await response.json();
       setCategoryCounts(data);
     } else {
       console.error("Failed to fetch category counts");
     }
-  }
+  };
 
   const handleLogout = async () => {
     apiClient.logout();
     router.replace("/login");
-  }
+  };
 
   useEffect(() => {
+    const doFetch = async () => {
+      await fetchNotes();
+      await fetchCountCategories();
+    };
+
     if (!loading && !user) {
       router.replace("/login");
     } else if (user) {
-      fetchNotes();
-      fetchCountCategories();
+      doFetch();
     }
   }, [loading, user, router]);
 
   useEffect(() => {
-    fetchNotes(selectedCategory === "all" ? "" : selectedCategory)
-  }, [selectedCategory]);
+    const doFetch = async () => {
+      await fetchNotes(selectedCategory === "all" ? "" : selectedCategory);
+    };
+    if (user) {
+      doFetch();
+    }
+  }, [selectedCategory, user]);
 
   if (loading) return <div className="p-6">Loading...</div>;
   if (!user) return null;
@@ -67,14 +82,21 @@ export default function NotesPage() {
     setIsEditorOpen(true);
   };
 
-  const handleSaveNote = async (title: string, content: string, category: string) => {
+  const handleSaveNote = async (
+    title: string,
+    content: string,
+    category: string,
+  ) => {
     const payload = { title, content, category };
     if (editingNote) {
-      const response = await apiClient.fetchWithAuth(`http://localhost:8000/notes/${editingNote.id}/`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
+      const response = await apiClient.fetchWithAuth(
+        `http://localhost:8000/notes/${editingNote.id}/`,
+        {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        },
+      );
       if (response.ok) {
         const data = await response.json().catch(() => null);
         fetchNotes();
@@ -85,11 +107,14 @@ export default function NotesPage() {
         return null;
       }
     } else {
-      const response = await apiClient.fetchWithAuth("http://localhost:8000/notes/", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
+      const response = await apiClient.fetchWithAuth(
+        "http://localhost:8000/notes/",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        },
+      );
       if (response.ok) {
         const data = await response.json().catch(() => null);
         fetchNotes();
@@ -101,7 +126,7 @@ export default function NotesPage() {
         return null;
       }
     }
-  }
+  };
 
   const handleEditNote = (note: Note) => {
     setEditingNote(note);
@@ -109,9 +134,12 @@ export default function NotesPage() {
   };
 
   const handleDeleteNote = async (noteId: string) => {
-    const response = await apiClient.fetchWithAuth(`http://localhost:8000/notes/${noteId}/`, {
-      method: "DELETE",
-    });
+    const response = await apiClient.fetchWithAuth(
+      `http://localhost:8000/notes/${noteId}/`,
+      {
+        method: "DELETE",
+      },
+    );
     if (response.ok) {
       fetchNotes();
       fetchCountCategories();
@@ -133,10 +161,7 @@ export default function NotesPage() {
         <header className="bg-background px-8 pt-10">
           <div className="flex justify-between items-center justify-end">
             <div className="flex items-center gap-1 h-10">
-              <Button
-                className="h-full"
-                onClick={handleNewNote}
-              >
+              <Button className="h-full" onClick={handleNewNote}>
                 <Plus className="mr-2" size={20} />
                 New Note
               </Button>

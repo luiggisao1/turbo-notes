@@ -1,7 +1,15 @@
-import { SignupFormSchema, FormState, loginSchema, LoginFormState } from '@/lib/definitions'
-import apiClient from '@/app/lib/apiClient';
+import {
+  SignupFormSchema,
+  FormState,
+  loginSchema,
+  LoginFormState,
+} from "@/lib/definitions";
+import apiClient from "@/app/lib/apiClient";
 
-export async function signup(state: FormState, payload: FormData): Promise<FormState> {
+export async function signup(
+  state: FormState,
+  payload: FormData,
+): Promise<FormState> {
   if (!(payload instanceof FormData)) {
     return {
       success: false,
@@ -31,17 +39,27 @@ export async function signup(state: FormState, payload: FormData): Promise<FormS
     const res = await fetch("http://localhost:8000/auth/register/", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email: parsed.data.email, password: parsed.data.password }),
+      body: JSON.stringify({
+        email: parsed.data.email,
+        password: parsed.data.password,
+      }),
     });
     const data = await res.json();
     await apiClient.setTokens({ access: data.access, refresh: data.refresh });
-    return { success: !data.error, tokens: { access: data.access, refresh: data.refresh }, errors: data.error ? { error: [data.error] } : undefined };
+    return {
+      success: !data.error,
+      tokens: { access: data.access, refresh: data.refresh },
+      errors: data.error ? { error: [data.error] } : undefined,
+    };
   } catch (error) {
     return { success: false, errors: { error: ["Signup failed"] } };
   }
 }
 
-export async function login(state: LoginFormState, payload: FormData): Promise<LoginFormState> {
+export async function login(
+  state: LoginFormState,
+  payload: FormData,
+): Promise<LoginFormState> {
   if (!(payload instanceof FormData)) {
     return {
       success: false,
@@ -67,13 +85,19 @@ export async function login(state: LoginFormState, payload: FormData): Promise<L
     const res = await fetch("http://localhost:8000/auth/login/", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email: parsed.data.email, password: parsed.data.password }),
+      body: JSON.stringify({
+        email: parsed.data.email,
+        password: parsed.data.password,
+      }),
     });
     const data = await res.json();
     await apiClient.setTokens({ access: data.access, refresh: data.refresh });
-    return { success: !data.error, tokens: { access: data.access, refresh: data.refresh }, error: data.error };
+    return {
+      success: !data.error,
+      tokens: { access: data.access, refresh: data.refresh },
+      error: data.error,
+    };
   } catch (error) {
     return { success: false, error: "Login failed" };
   }
 }
-

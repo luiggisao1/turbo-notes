@@ -1,8 +1,9 @@
 ## Turbo Notes
+
 A note-taking web application built with Next.js, Radix UI, and Tailwind CSS, featuring user authentication and category-based organization.
 
-
 ## Project Summary
+
 - The structure and decisions are intended to make the project:
   - Easy to reason about (clear separation of concerns)
   - Easy to test (thin API client, small components)
@@ -10,6 +11,30 @@ A note-taking web application built with Next.js, Radix UI, and Tailwind CSS, fe
   - Fast to iterate on (Tailwind for styling and AI assistance for scaffolding)
 - Overall, the development process and design choices aimed to create a robust, user-friendly note-taking application that can be easily extended and maintained over time.
 
+## Quick Start
+
+Prerequisites:
+
+- Node.js (v16 or later)
+- pnpm
+
+### Installation
+
+1. Install dependencies:
+
+```bash
+pnpm install
+```
+
+### Running the development server
+
+2. Start the development server:
+
+```bash
+pnpm dev
+```
+
+3. Open your browser and navigate to `http://localhost:3000` to view the application.
 
 ## Development process
 
@@ -43,6 +68,7 @@ This sequence (auth → core UI → tests) helped ensure that components were de
   - Selected Vitest for its speed and compatibility with Vite, along with Testing Library for its user-centric testing approach. This combination facilitated writing meaningful tests that focus on user interactions and component behavior.
 
 ## AI tools used and how I used them
+
 - Utilized AI tools to assist with scaffolding test cases and generating boilerplate code. This helped speed up the development process while ensuring that the core logic and final implementations were reviewed and refined by human developers.
 - Employed AI for brainstorming solutions to complex problems, such as state management and component composition, while ensuring that final decisions were made based on best practices and project requirements.
 - Used AI to generate documentation and comments, ensuring clarity and consistency throughout the codebase.

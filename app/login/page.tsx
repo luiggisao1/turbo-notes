@@ -1,16 +1,16 @@
-"use client"
+"use client";
 
 import { useActionState, useEffect, useState } from "react";
 import { useAuth } from "@/app/lib/auth";
-import Form from 'next/form'
+import Form from "next/form";
 import Image from "next/image";
-import Link from 'next/link';
+import Link from "next/link";
 
 import { Eye, EyeClosed } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
-import { login } from '@/app/actions/auth';
+import { login } from "@/app/actions/auth";
 import { useToast } from "@/app/hooks/use-toast";
 
 export default function LoginPage() {
@@ -26,7 +26,7 @@ export default function LoginPage() {
   useEffect(() => {
     const authWithToken = async (access: string, refresh: string) => {
       return auth.loginWithTokens({ access, refresh }, "/");
-    }
+    };
 
     if (state.success && !pending) {
       toast({
@@ -42,7 +42,12 @@ export default function LoginPage() {
     <div className="min-h-screen flex items-center justify-center">
       <div className="w-full max-w-md px-6">
         <div className="flex flex-col items-center mb-9">
-          <Image src='/cactus.png' alt="Cactus Illustration" width={100} height={100} />
+          <Image
+            src="/cactus.png"
+            alt="Cactus Illustration"
+            width={100}
+            height={100}
+          />
           <h1 className="text-4xl inria-serif-bold font-bold text-foreground mb-2 mt-8">
             Yay, You're Back!
           </h1>
@@ -76,7 +81,11 @@ export default function LoginPage() {
               onClick={() => setShowPassword(!showPassword)}
               className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
             >
-              {showPassword ? <Eye className="text-foreground" size={20} /> : <EyeClosed className="text-foreground" size={20} />}
+              {showPassword ? (
+                <Eye className="text-foreground" size={20} />
+              ) : (
+                <EyeClosed className="text-foreground" size={20} />
+              )}
             </button>
           </div>
 

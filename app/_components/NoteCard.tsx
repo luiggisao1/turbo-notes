@@ -39,7 +39,9 @@ const formatDate = (dateString: string) => {
 };
 
 export const NoteCard = ({ note, onEdit, onDelete }: NoteCardProps) => {
-  const colorClass = CATEGORY_COLORS[note.category as keyof typeof CATEGORY_COLORS] || "bg-card border-border";
+  const colorClass =
+    CATEGORY_COLORS[note.category as keyof typeof CATEGORY_COLORS] ||
+    "bg-card border-border";
 
   return (
     <div
@@ -50,7 +52,9 @@ export const NoteCard = ({ note, onEdit, onDelete }: NoteCardProps) => {
       <div className="flex items-center justify-between mb-2">
         <div className="flex items-center gap-2 text-sm text-black">
           <span className="inter-bold">{formatDate(note.created_at)}</span>
-          <span className="inter-regular">{mapCategoryToText(note.category)}</span>
+          <span className="inter-regular">
+            {mapCategoryToText(note.category)}
+          </span>
         </div>
         <Button
           variant="ghost"
@@ -67,7 +71,11 @@ export const NoteCard = ({ note, onEdit, onDelete }: NoteCardProps) => {
 
       <h3 className="text-4xl inria-serif-bold mb-3">{note.title}</h3>
 
-      {note.content && <p className="text-md inter-regular line-clamp-4 whitespace-pre-wrap">{note.content}</p>}
+      {note.content && (
+        <p className="text-md inter-regular line-clamp-4 whitespace-pre-wrap">
+          {note.content}
+        </p>
+      )}
     </div>
   );
 };

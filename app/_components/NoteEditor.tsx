@@ -2,7 +2,13 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { X } from "lucide-react";
 import { format, set } from "date-fns";
 
@@ -19,7 +25,11 @@ interface NoteEditorProps {
   note: Note | null;
   isOpen: boolean;
   onClose: () => void;
-  onSave: (title: string, content: string, category: string) => Promise<Note | null> | void;
+  onSave: (
+    title: string,
+    content: string,
+    category: string,
+  ) => Promise<Note | null> | void;
 }
 
 const CATEGORY_COLORS = {
@@ -28,12 +38,19 @@ const CATEGORY_COLORS = {
   personal: "bg-[#78ABA880] border-[#78ABA8]",
 };
 
-export const NoteEditor = ({ note, isOpen, onClose, onSave }: NoteEditorProps) => {
+export const NoteEditor = ({
+  note,
+  isOpen,
+  onClose,
+  onSave,
+}: NoteEditorProps) => {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [category, setCategory] = useState("random");
 
-  const [lastEdited, setLastEdited] = useState<string | undefined>(note?.updated_at || note?.created_at);
+  const [lastEdited, setLastEdited] = useState<string | undefined>(
+    note?.updated_at || note?.created_at,
+  );
   const [isDirty, setIsDirty] = useState(false);
 
   useEffect(() => {
@@ -59,7 +76,11 @@ export const NoteEditor = ({ note, isOpen, onClose, onSave }: NoteEditorProps) =
 
     const timeout = setTimeout(async () => {
       try {
-        const result = (await onSave(title, content, category)) as Note | null | void;
+        const result = (await onSave(
+          title,
+          content,
+          category,
+        )) as Note | null | void;
         if (result && result.updated_at) {
           setLastEdited(result.updated_at);
         } else {
@@ -74,7 +95,8 @@ export const NoteEditor = ({ note, isOpen, onClose, onSave }: NoteEditorProps) =
     return () => clearTimeout(timeout);
   }, [title, content, category, isDirty, isOpen]);
 
-  const colorClass = CATEGORY_COLORS[category as keyof typeof CATEGORY_COLORS] || "bg-card";
+  const colorClass =
+    CATEGORY_COLORS[category as keyof typeof CATEGORY_COLORS] || "bg-card";
 
   if (!isOpen) return null;
 
@@ -94,19 +116,28 @@ export const NoteEditor = ({ note, isOpen, onClose, onSave }: NoteEditorProps) =
             </div>
           </SelectTrigger>
           <SelectContent className="bg-[#F5EFE7] border-2 border-foreground/20">
-            <SelectItem value="random" className="text-lg py-3 hover:bg-[#95713933]">
+            <SelectItem
+              value="random"
+              className="text-lg py-3 hover:bg-[#95713933]"
+            >
               <div className="flex items-center gap-3">
                 <span className="inter-regular w-4 h-4 rounded-full bg-[#EF9C66]" />
                 Random Thoughts
               </div>
             </SelectItem>
-            <SelectItem value="personal" className="text-lg py-3 hover:bg-[#95713933]">
+            <SelectItem
+              value="personal"
+              className="text-lg py-3 hover:bg-[#95713933]"
+            >
               <div className="flex items-center gap-3">
                 <span className="inter-regular w-4 h-4 rounded-full bg-[#78ABA8]" />
                 Personal
               </div>
             </SelectItem>
-            <SelectItem value="school" className="text-lg py-3 hover:bg-[#95713933]">
+            <SelectItem
+              value="school"
+              className="text-lg py-3 hover:bg-[#95713933]"
+            >
               <div className="flex items-center gap-3">
                 <span className="inter-regular w-4 h-4 rounded-full bg-[#FCDC94]" />
                 School
@@ -114,16 +145,23 @@ export const NoteEditor = ({ note, isOpen, onClose, onSave }: NoteEditorProps) =
             </SelectItem>
           </SelectContent>
         </Select>
-        <Button onClick={onClose} variant="ghost" className="text-foreground hover:bg-background/50">
+        <Button
+          onClick={onClose}
+          variant="ghost"
+          className="text-foreground hover:bg-background/50"
+        >
           <X className="w-[24px]! h-[24px]!" />
         </Button>
       </div>
-      <div className={`m-6 mt-3 pt-10 px-16 rounded-xl ${colorClass} border-3 flex flex-col h-full`}>
+      <div
+        className={`m-6 mt-3 pt-10 px-16 rounded-xl ${colorClass} border-3 flex flex-col h-full`}
+      >
         <div className={`flex items-center justify-end pb-4`}>
           <div className="flex items-center gap-4">
             {lastEdited && (
               <span className="text-sm inter-regular">
-                Last Edited: {format(new Date(lastEdited), "MMMM d, yyyy 'at' h:mmaaa")}
+                Last Edited:{" "}
+                {format(new Date(lastEdited), "MMMM d, yyyy 'at' h:mmaaa")}
               </span>
             )}
           </div>
