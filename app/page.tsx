@@ -35,7 +35,6 @@ export default function NotesPage() {
     const response = await apiClient.fetchWithAuth("http://localhost:8000/notes/counts-by-category/");
     if (response.ok) {
       const data = await response.json();
-      console.log("Category counts:", data);
       setCategoryCounts(data);
     } else {
       console.error("Failed to fetch category counts");
@@ -95,6 +94,7 @@ export default function NotesPage() {
         const data = await response.json().catch(() => null);
         fetchNotes();
         fetchCountCategories();
+        setEditingNote(data);
         return data as Note | null;
       } else {
         console.error("Failed to create note");

@@ -67,7 +67,7 @@ export const NoteEditor = ({ note, isOpen, onClose, onSave }: NoteEditorProps) =
         }
         setIsDirty(false);
       } catch (err) {
-        // ignore autosave errors for now
+        onClose();
       }
     }, 800);
 
